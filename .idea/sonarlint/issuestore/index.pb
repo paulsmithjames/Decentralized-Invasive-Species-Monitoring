@@ -11,3 +11,5 @@ T
 $tests/treatment-verification.test.ts,c/4/c4100a930ef5c5bdc39d71686259acd0132c9f3b
 T
 $tests/species-identification.test.ts,3/5/35471ceacc9c6c62723db023da3d7ff9797914b9
+U
+%contracts/treatment-verification.clar,2/7/273b2883380f760a7cf9710a5367ab0fdb6cd251
