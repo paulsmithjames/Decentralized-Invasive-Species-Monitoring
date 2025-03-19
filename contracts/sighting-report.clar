@@ -1,30 +1,47 @@
+;; Sighting Report Contract
+;; Tracks locations and spread of invasive species
 
-;; title: sighting-report
-;; version:
-;; summary:
-;; description:
+(define-data-var last-id uint u0)
 
-;; traits
-;;
+(define-map sightings
+  { id: uint }
+  {
+    species-id: uint,
+    latitude: int,
+    longitude: int,
+    date: uint,
+    reported-by: principal
+  }
+)
 
-;; token definitions
-;;
+(define-public (report-sighting
+    (species-id uint)
+    (latitude int)
+    (longitude int)
+    (date uint)
+  )
+  (let
+    (
+      (new-id (+ (var-get last-id) u1))
+    )
+    (var-set last-id new-id)
 
-;; constants
-;;
+    (map-set sightings
+      { id: new-id }
+      {
+        species-id: species-id,
+        latitude: latitude,
+        longitude: longitude,
+        date: date,
+        reported-by: tx-sender
+      }
+    )
 
-;; data vars
-;;
+    (ok new-id)
+  )
+)
 
-;; data maps
-;;
-
-;; public functions
-;;
-
-;; read only functions
-;;
-
-;; private functions
-;;
+(define-read-only (get-sighting (id uint))
+  (map-get? sightings { id: id })
+)
 
