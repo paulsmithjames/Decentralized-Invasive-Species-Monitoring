@@ -1,30 +1,47 @@
+;; Treatment Verification Contract
+;; Monitors eradication and control efforts
 
-;; title: treatment-verification
-;; version:
-;; summary:
-;; description:
+(define-data-var last-id uint u0)
 
-;; traits
-;;
+(define-map treatments
+  { id: uint }
+  {
+    sighting-id: uint,
+    method: (string-utf8 100),
+    date: uint,
+    success-rate: uint,
+    performed-by: principal
+  }
+)
 
-;; token definitions
-;;
+(define-public (record-treatment
+    (sighting-id uint)
+    (method (string-utf8 100))
+    (date uint)
+    (success-rate uint)
+  )
+  (let
+    (
+      (new-id (+ (var-get last-id) u1))
+    )
+    (var-set last-id new-id)
 
-;; constants
-;;
+    (map-set treatments
+      { id: new-id }
+      {
+        sighting-id: sighting-id,
+        method: method,
+        date: date,
+        success-rate: success-rate,
+        performed-by: tx-sender
+      }
+    )
 
-;; data vars
-;;
+    (ok new-id)
+  )
+)
 
-;; data maps
-;;
-
-;; public functions
-;;
-
-;; read only functions
-;;
-
-;; private functions
-;;
+(define-read-only (get-treatment (id uint))
+  (map-get? treatments { id: id })
+)
 

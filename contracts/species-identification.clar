@@ -1,30 +1,44 @@
+;; Species Identification Contract
+;; Records details of invasive plants and animals
 
-;; title: species-identification
-;; version:
-;; summary:
-;; description:
+(define-data-var last-id uint u0)
 
-;; traits
-;;
+(define-map species
+  { id: uint }
+  {
+    name: (string-utf8 100),
+    type: (string-utf8 20),
+    risk-level: uint,
+    registered-by: principal
+  }
+)
 
-;; token definitions
-;;
+(define-public (register-species
+    (name (string-utf8 100))
+    (type (string-utf8 20))
+    (risk-level uint)
+  )
+  (let
+    (
+      (new-id (+ (var-get last-id) u1))
+    )
+    (var-set last-id new-id)
 
-;; constants
-;;
+    (map-set species
+      { id: new-id }
+      {
+        name: name,
+        type: type,
+        risk-level: risk-level,
+        registered-by: tx-sender
+      }
+    )
 
-;; data vars
-;;
+    (ok new-id)
+  )
+)
 
-;; data maps
-;;
-
-;; public functions
-;;
-
-;; read only functions
-;;
-
-;; private functions
-;;
+(define-read-only (get-species (id uint))
+  (map-get? species { id: id })
+)
 
